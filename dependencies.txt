@@ -1,0 +1,5 @@
+typer
+tqdm
+python-dotenv
+colorama
+mongoengine
