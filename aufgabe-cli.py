@@ -5,6 +5,9 @@ import bin.projects
 import util.logger as logger
 import repository.mongodb as mongodb_utils
 
+import config.globalvars as glbvars
+from util.logger import Logger
+
 aufgabe_app = typer.Typer()
 
 MODULES = {
@@ -17,22 +20,21 @@ def add_modules():
         module = list(pair)[1].aufgabe_module
         aufgabe_app.add_typer(module, name=module_name)
 
-
-class TestClass:
-    def __init__(self, a, b, c):
-        self.longer = a
-        self.b = b
-        self.c = c
-
-@aufgabe_app.command()
-def test():
-    logger.echo_tabular([
-		TestClass(1,2,3000), TestClass(4,5,6), TestClass(200, 400, 300)
-	], primary_prop='longer')
-
 @aufgabe_app.command()
 def check():
     pass
+
+@aufgabe_app.command()
+def checkout(project_id):
+    prj = bin.projects.checkout(project_id)
+
+    if prj.id == glbvars.vars_read('project'):
+        Logger.warn('Project is already checked out. There is no need to reattempt action')
+        return
+
+    glbvars.vars_write('project', prj.id)
+    Logger.info("Switched to project " + typer.style(project_id, fg=bin.projects.COLOR_ID))
+    logger.echo_dict(prj.__dict__)
 
 def main(command: str):
 	# echo_logo()

@@ -13,5 +13,8 @@ def remove(project_id: str):
 def get(project_id: str):
 	return collection.find_one({'id' : project_id})
 
+def update(project_id: str, update_data: dict):
+    return collection.update_one({'id' : project_id}, update_data)
+
 def getall():
     return collection.find({})
