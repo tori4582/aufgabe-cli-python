@@ -75,14 +75,20 @@ def show():
 
 
 def checkout(project_id):
+
+    if project_id == glbvars.vars_read('project'):
+        Logger.warn('Project is already checked out. There is no need to reattempt action')
+        return
+
     prj = project_repo.get(project_id)
 
-    if prj is NoneType:
+    if isinstance(prj, NoneType):
         Logger.error("Project with given id is not existed")
         return None
 
-    return Project.from_dict(prj)
-
+    glbvars.vars_write('project', prj.id)
+    Logger.info("Switched to project " + typer.style(project_id, fg=bin.projects.COLOR_ID))
+    logger.echo_dict(prj.__dict__)
 
 if __name__ == "__main__":
     aufgabe_module()

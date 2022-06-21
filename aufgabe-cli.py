@@ -26,15 +26,7 @@ def check():
 
 @aufgabe_app.command()
 def checkout(project_id):
-    prj = bin.projects.checkout(project_id)
-
-    if prj.id == glbvars.vars_read('project'):
-        Logger.warn('Project is already checked out. There is no need to reattempt action')
-        return
-
-    glbvars.vars_write('project', prj.id)
-    Logger.info("Switched to project " + typer.style(project_id, fg=bin.projects.COLOR_ID))
-    logger.echo_dict(prj.__dict__)
+    bin.projects.checkout(project_id)
 
 def main(command: str):
 	# echo_logo()
